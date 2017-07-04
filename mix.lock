@@ -1,0 +1,3 @@
+%{"cachex": {:hex, :cachex, "2.1.0", "fad49b4e78d11c6c314e75bd8c9408f5b78cb065c047442798caed10803ee3be", [:mix], [{:eternal, "~> 1.1", [hex: :eternal, repo: "hexpm", optional: false]}], "hexpm"},
+  "deppie": {:hex, :deppie, "1.1.0", "cfb6fcee7dfb64eb78cb8505537971a0805131899326ad469ef10df04520f451", [:mix], [], "hexpm"},
+  "eternal": {:hex, :eternal, "1.1.4", "3a40fd9b9708f79216a6ec8ae886f2b17685dc26b119b9c0403c2b0d3dc1ac69", [:mix], [{:deppie, "~> 1.1", [hex: :deppie, repo: "hexpm", optional: false]}], "hexpm"}}
