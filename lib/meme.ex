@@ -33,7 +33,7 @@ defmodule Meme do
   # public macro to use instead of defp
   #
 
-  defmacro defpmemo(f_head = {:when, _, [{f_name, _, f_args} | _]}, [timeout: timeout], [do: body]) do
+  defmacro defmemop(f_head = {:when, _, [{f_name, _, f_args} | _]}, [timeout: timeout], [do: body]) do
     quote do
       defp unquote(f_head) do
         {
@@ -45,7 +45,7 @@ defmodule Meme do
       end
     end
   end
-  defmacro defpmemo(f_head = {f_name, _, f_args}, [timeout: timeout], [do: body]) do
+  defmacro defmemop(f_head = {f_name, _, f_args}, [timeout: timeout], [do: body]) do
     quote do
       defp unquote(f_head) do
         {
@@ -59,7 +59,7 @@ defmodule Meme do
   end
 
   #
-  # it's public only for defmemo / defpmemo macro
+  # it's public only for defmemo / defmemop macro
   #
 
   defmacro meme_under_the_hood(key, timeout, code) do

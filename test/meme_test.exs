@@ -33,26 +33,26 @@ defmodule MemeTest do
     assert result != __MODULE__.rand_public_when(@randlimit)
   end
 
-  defpmemo rand_private(limit), timeout: @ttl do
+  defmemop rand_private(limit), timeout: @ttl do
     :rand.uniform(limit)
   end
-  test "defpmemo generates private function" do
+  test "defmemop generates private function" do
     assert false == :erlang.function_exported(__MODULE__, :rand_private, 1)
   end
-  test "defpmemo" do
+  test "defmemop" do
     result = rand_private(@randlimit)
     assert result == rand_private(@randlimit)
     _ = :timer.sleep(@ttl * 2)
     assert result != rand_private(@randlimit)
   end
 
-  defpmemo rand_private_when(limit) when (is_integer(limit) and (limit > 0)), timeout: @ttl do
+  defmemop rand_private_when(limit) when (is_integer(limit) and (limit > 0)), timeout: @ttl do
     :rand.uniform(limit)
   end
-  test "defpmemo + when generates private function" do
+  test "defmemop + when generates private function" do
     assert false == :erlang.function_exported(__MODULE__, :rand_private_when, 1)
   end
-  test "defpmemo + when" do
+  test "defmemop + when" do
     result = rand_private_when(@randlimit)
     assert result == rand_private_when(@randlimit)
     _ = :timer.sleep(@ttl * 2)
