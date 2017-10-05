@@ -76,11 +76,25 @@ defmodule MemeTest do
     assert {1, 2, 3} = args_context(1, 2, 3)
   end
 
-  defmemop args_context_pm(%{arg0: arg0}), timeout: @ttl do
+  defmemop args_context_pm(%{data: arg0}), timeout: @ttl do
     arg0
   end
-  test "args context pm" do
-    assert 1 == args_context_pm(%{arg0: 1})
+  test "args context pm inside" do
+    assert 1 == args_context_pm(%{data: 1})
+  end
+
+  defmemop args_context_pm_left(arg1 = %{data: arg0}), timeout: @ttl do
+    {arg0, arg1}
+  end
+  test "args context pm left" do
+    assert {1, %{data: 1}} = args_context_pm_left(%{data: 1})
+  end
+
+  defmemop args_context_pm_right(%{data: arg0} = arg1), timeout: @ttl do
+    {arg0, arg1}
+  end
+  test "args context pm right" do
+    assert {1, %{data: 1}} = args_context_pm_right(%{data: 1})
   end
 
 end
