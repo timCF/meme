@@ -59,4 +59,28 @@ defmodule MemeTest do
     assert result != rand_private_when(@randlimit)
   end
 
+  defmemop pm_test(%{data: limit}), timeout: @ttl do
+    :rand.uniform(limit)
+  end
+  test "P.M. support" do
+    result = pm_test(%{data: @randlimit})
+    assert result == pm_test(%{data: @randlimit})
+    _ = :timer.sleep(@ttl * 2)
+    assert result != pm_test(%{data: @randlimit})
+  end
+
+  defmemop args_context(arg2, arg1, arg0), timeout: @ttl do
+    {arg2, arg1, arg0}
+  end
+  test "args context" do
+    assert {1, 2, 3} = args_context(1, 2, 3)
+  end
+
+  defmemop args_context_pm(%{arg0: arg0}), timeout: @ttl do
+    arg0
+  end
+  test "args context pm" do
+    assert 1 == args_context_pm(%{arg0: 1})
+  end
+
 end
