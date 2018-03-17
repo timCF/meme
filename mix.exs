@@ -7,7 +7,23 @@ defmodule Meme.Mixfile do
      elixir: "~> 1.4",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps()]
+     deps: deps(),
+
+     description: "Memoization (caching) of function calls",
+     source_url: "https://github.com/timCF/meme/",
+     package: [
+       licenses: ["Apache 2.0"],
+       maintainers: ["Ilja Tkachuk aka timCF"],
+       links: %{
+         "GitHub" => "https://github.com/timCF/meme/",
+         "Author's home page" => "https://timcf.github.io/"
+       }
+     ],
+     # Docs
+     name: "Meme",
+     docs: [main: "readme", extras: ["README.md"]],
+
+   ]
   end
 
   # Configuration for the OTP application
@@ -29,6 +45,9 @@ defmodule Meme.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:cachex, "~> 2.1"}]
+    [
+      {:cachex, "~> 2.1"},
+      {:ex_doc, "~> 0.16", only: :dev, runtime: false},
+    ]
   end
 end
