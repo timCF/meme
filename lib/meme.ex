@@ -12,6 +12,7 @@ defmodule Meme do
       end
     end
   end
+
   defmacro defmemo({name, meta, raw_args}, [timeout: timeout], [do: body]) do
     {arg_names, decorated_args} = decorate_args(raw_args)
     quote do
@@ -20,6 +21,39 @@ defmodule Meme do
       end
     end
   end
+
+  #
+  # public macro - creates cached copy of function
+  # if function name is :foo then two functions will be generated
+  # :foo and :cached_foo (arity, arguments and business logic is the same)
+  #
+
+  defmacro defcached(raw_definition = {:when, when_meta, [{name, meta, raw_args} | guards]}, [timeout: timeout], [do: body]) do
+    {arg_names, decorated_args} = decorate_args(raw_args)
+    cached_name = String.to_atom("cached_#{name}")
+    quote do
+      def unquote({:when, when_meta, [{cached_name, meta, decorated_args} | guards]}) do
+        unquote(meme_under_the_hood(cached_name, arg_names, timeout, body))
+      end
+      def unquote(raw_definition) do
+        unquote(body)
+      end
+    end
+  end
+
+  defmacro defcached(raw_definition = {name, meta, raw_args}, [timeout: timeout], [do: body]) do
+    {arg_names, decorated_args} = decorate_args(raw_args)
+    cached_name = String.to_atom("cached_#{name}")
+    quote do
+      def unquote({cached_name, meta, decorated_args}) do
+        unquote(meme_under_the_hood(cached_name, arg_names, timeout, body))
+      end
+      def unquote(raw_definition) do
+        unquote(body)
+      end
+    end
+  end
+
 
   #
   # public macro to use instead of defp
@@ -33,11 +67,42 @@ defmodule Meme do
       end
     end
   end
+
   defmacro defmemop({name, meta, raw_args}, [timeout: timeout], [do: body]) do
     {arg_names, decorated_args} = decorate_args(raw_args)
     quote do
       defp unquote({name, meta, decorated_args}) do
         unquote(meme_under_the_hood(name, arg_names, timeout, body))
+      end
+    end
+  end
+
+  #
+  # public macro - creates functions like defcached do, but private
+  #
+
+  defmacro defcachedp(raw_definition = {:when, when_meta, [{name, meta, raw_args} | guards]}, [timeout: timeout], [do: body]) do
+    {arg_names, decorated_args} = decorate_args(raw_args)
+    cached_name = String.to_atom("cached_#{name}")
+    quote do
+      defp unquote({:when, when_meta, [{cached_name, meta, decorated_args} | guards]}) do
+        unquote(meme_under_the_hood(cached_name, arg_names, timeout, body))
+      end
+      defp unquote(raw_definition) do
+        unquote(body)
+      end
+    end
+  end
+
+  defmacro defcachedp(raw_definition = {name, meta, raw_args}, [timeout: timeout], [do: body]) do
+    {arg_names, decorated_args} = decorate_args(raw_args)
+    cached_name = String.to_atom("cached_#{name}")
+    quote do
+      defp unquote({cached_name, meta, decorated_args}) do
+        unquote(meme_under_the_hood(cached_name, arg_names, timeout, body))
+      end
+      defp unquote(raw_definition) do
+        unquote(body)
       end
     end
   end
