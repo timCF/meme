@@ -152,15 +152,29 @@ defmodule Meme do
   #
 
   defp meme_under_the_hood(name, args, timeout, code, condition) do
+
+    conditional_caching_ast =
+      condition
+      |> case do
+        {:fn, _, [{:->, _, [[{:_, _, Meme}], true]}]} ->
+          quote do
+            {:ok, true} = Cachex.set(:meme, key, value, [ttl: unquote(timeout)])
+          end
+        _ ->
+          quote do
+            if ((unquote(condition)).(value) == true) do
+              {:ok, true} = Cachex.set(:meme, key, value, [ttl: unquote(timeout)])
+            end
+          end
+      end
+
     quote do
       (
         key = {__MODULE__, unquote(name), unquote(args)}
         case Cachex.get(:meme, key) do
           {:missing, nil} ->
             value = (unquote(code))
-            if ((unquote(condition)).(value) == true) do
-              {:ok, true} = Cachex.set(:meme, key, value, [ttl: unquote(timeout)])
-            end
+            unquote(conditional_caching_ast)
             value
           {:ok, value} ->
             value
