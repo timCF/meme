@@ -158,10 +158,8 @@ defmodule Meme do
         case Cachex.get(:meme, key) do
           {:missing, nil} ->
             value = (unquote(code))
-            (unquote(condition)).(value)
-            |> case do
-              true -> {:ok, true} = Cachex.set(:meme, key, value, [ttl: unquote(timeout)])
-              false -> :ok
+            if ((unquote(condition)).(value) == true) do
+              {:ok, true} = Cachex.set(:meme, key, value, [ttl: unquote(timeout)])
             end
             value
           {:ok, value} ->
