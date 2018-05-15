@@ -10,12 +10,12 @@ defmodule Meme.Mixfile do
      deps: deps(),
 
      description: "Memoization (caching) of function calls",
-     source_url: "https://github.com/timCF/meme/",
+     source_url: "https://github.com/coingaming/meme/",
      package: [
        licenses: ["Apache 2.0"],
        maintainers: ["Ilja Tkachuk aka timCF"],
        links: %{
-         "GitHub" => "https://github.com/timCF/meme/",
+         "GitHub" => "https://github.com/coingaming/meme/",
          "Author's home page" => "https://timcf.github.io/"
        }
      ],
