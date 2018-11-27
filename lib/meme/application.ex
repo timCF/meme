@@ -12,7 +12,7 @@ defmodule Meme.Application do
     children = [
       # Starts a worker by calling: Meme.Worker.start_link(arg1, arg2, arg3)
       # worker(Meme.Worker, [arg1, arg2, arg3]),
-      worker(Cachex, [ :meme, [default_ttl: 3000], [] ], [id: :meme])
+      worker(Cachex, [:meme, [], []], [id: :meme])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
