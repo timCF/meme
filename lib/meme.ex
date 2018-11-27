@@ -110,22 +110,6 @@ defmodule Meme do
   end
 
   #
-  # simple public function for MFA usage
-  #
-
-  def memo(module, func, args, ttl) when (is_atom(module) and is_atom(func) and is_list(args) and is_integer(ttl) and (ttl > 0)) do
-    key = {module, func, args}
-    case Cachex.get(:meme, key) do
-      {:missing, nil} ->
-        value = :erlang.apply(module, func, args)
-        {:ok, true} = Cachex.set(:meme, key, value, [ttl: ttl])
-        value
-      {:ok, value} ->
-        value
-    end
-  end
-
-  #
   # priv boilerplate for macro
   #
 
@@ -143,12 +127,12 @@ defmodule Meme do
       |> case do
         nil ->
           quote do
-            {:ok, true} = Cachex.set(:meme, key, value, [ttl: unquote(timeout)])
+            {:ok, true} = Cachex.put(:meme, key, {:exists, value}, [ttl: unquote(timeout)])
           end
         {ast, _, _} when (ast in [:fn, :&]) ->
           quote do
             if ((unquote(condition)).(value) == true) do
-              {:ok, true} = Cachex.set(:meme, key, value, [ttl: unquote(timeout)])
+              {:ok, true} = Cachex.put(:meme, key, {:exists, value}, [ttl: unquote(timeout)])
             end
           end
       end
@@ -157,11 +141,11 @@ defmodule Meme do
       (
         key = {__MODULE__, unquote(name), unquote(args)}
         case Cachex.get(:meme, key) do
-          {:missing, nil} ->
+          {:ok, nil} ->
             value = (unquote(code))
             unquote(conditional_caching_ast)
             value
-          {:ok, value} ->
+          {:ok, {:exists, value}} ->
             value
         end
       )

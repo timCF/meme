@@ -6,13 +6,6 @@ defmodule MemeTest do
   @ttl 1000
   @randlimit 6000000000
 
-  test "memo" do
-    result = Meme.memo(:rand, :uniform, [@randlimit], @ttl)
-    assert result == Meme.memo(:rand, :uniform, [@randlimit], @ttl)
-    _ = :timer.sleep(@ttl * 2)
-    assert result != Meme.memo(:rand, :uniform, [@randlimit], @ttl)
-  end
-
   defmemo rand_public(limit), timeout: @ttl do
     :rand.uniform(limit)
   end

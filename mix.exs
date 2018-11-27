@@ -46,7 +46,7 @@ defmodule Meme.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:cachex, "~> 2.1"},
+      {:cachex, "~> 3.1.1"},
       {:ex_doc, "~> 0.16", only: :dev, runtime: false},
     ]
   end
