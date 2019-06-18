@@ -4,7 +4,7 @@ defmodule Meme.Mixfile do
   def project do
     [
       app: :meme,
-      version: "0.2.1",
+      version: "0.2.2",
       elixir: "~> 1.4",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -44,7 +44,7 @@ defmodule Meme.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:cachex, "~> 3.1.1"},
+      {:cachex, "~> 3.1.3"},
       {:ex_doc, "~> 0.19", only: :dev, runtime: false}
     ]
   end
